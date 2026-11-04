@@ -1,0 +1,103 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+int main() {
+    srand(time(0));
+
+    int chip = 1000;
+    char pilihan;
+
+    cout << "=== GAME BLACKJACK ===" << endl;
+
+    while (chip > 0) {
+        cout <<" "<< endl;
+        cout << "Chip kamu saat ini: " << chip << endl;
+
+        int taruhan = 0;
+        cout << "Masukkan jumlah taruhan: ";
+        cin >> taruhan;
+
+        if (taruhan <= 0 || taruhan > chip) {
+            cout << "Jumlah taruhan tidak valid!" << endl;
+            continue;
+        }
+
+        int skorPemain = (rand() % 10 + 1) + (rand() % 10 + 1);
+        int skorDealer = (rand() % 10 + 1) + (rand() % 10 + 1);
+
+        cout <<" "<< endl;
+        cout << "Skor kamu saat ini: " << skorPemain << endl;
+
+        bool pemainKalah = false;
+        while (skorPemain < 21) {
+            cout << "Apakah ingin tambah kartu? (y/t): ";
+            cin >> pilihan;
+
+            if (pilihan == 'y' || pilihan == 'Y') {
+                int kartuBaru = rand() % 10 + 1;
+                skorPemain += kartuBaru;
+                cout << "Kamu dapat kartu: " << kartuBaru << " | Total skor: " << skorPemain << endl;
+
+                if (skorPemain > 21) {
+                    pemainKalah = true;
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+
+        if (pemainKalah) {
+            cout <<" "<< endl;
+            cout << "Skor kamu lebih dari 21! Kamu Kalah." << endl;
+            chip -= taruhan;
+        } else {
+
+            cout <<" "<< endl;
+            cout << "Skor Dealer awal: " << skorDealer << endl;
+            while (skorDealer < 17) {
+                int kartuDealer = rand() % 10 + 1;
+                skorDealer += kartuDealer;
+                cout << "Dealer mengambil kartu. Skor Dealer sekarang: " << skorDealer << endl;
+            }
+
+            cout << "--- HASIL ---" << endl;
+            cout << "Skor Kamu   : " << skorPemain << endl;
+            cout << "Skor Dealer : " << skorDealer << endl;
+
+            if (skorDealer > 21 || skorPemain > skorDealer) {
+                cout << "Selamat! Kamu Menang!" << endl;
+                chip += taruhan;
+            } else if (skorPemain < skorDealer) {
+                cout << "Kamu Kalah!" << endl;
+                chip -= taruhan;
+            } else {
+                cout << "Hasil Seri!" << endl;
+            }
+        }
+
+        if (chip > 0) {
+
+            cout <<" "<< endl;
+            cout << "Main lagi? (y/t): ";
+            cin >> pilihan;
+            if (pilihan != 'y' && pilihan != 'Y') {
+                break;
+            }
+        }
+    }
+
+
+    if (chip <= 0) {
+        cout <<" "<< endl;
+        cout << "Chip kamu habis! Game Over." << endl;
+    } else {
+        cout <<" "<< endl;
+        cout << "Terima kasih telah bermain! Sisa chip kamu: $" << chip << endl;
+    }
+
+    return 0;
+}
